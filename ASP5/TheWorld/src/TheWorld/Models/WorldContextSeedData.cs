@@ -2,26 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace TheWorld.Models
 {
     public class WorldContextSeedData
     {
         private WorldContext _context;
+        private UserManager<WorldUser> _userManager;
 
-        public WorldContextSeedData(WorldContext context)
+        public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-        public void EnsureSeedData()
+        public async Task EnsureSeedDataAsync()
         {
+            if (await _userManager.FindByEmailAsync("sam.hastings@theworld.com") == null)
+            {
+
+                //add the user
+
+                var newUser = new WorldUser()
+                {
+                    UserName = "samhastings",
+                    Email = "sam.hastings@theworld.com"
+                };
+                var result = await _userManager.CreateAsync(newUser, "Password12#$");
+            }
+         
+
+
             if (_context.Trips.Any()) return;
             //Add new data
             var usTrip = new Trip()
             {
                 Name = "US Trip",
                 Created = DateTime.UtcNow,
-                UserName = "",
+                UserName = "samhastings",
                 Stops = new List<Stop>()
                 {
                     new Stop() {  Name = "Atlanta, GA", Arrival = new DateTime(2014, 6, 4), Latitude = 33.748995, Longitude = -84.387982, Order = 0 },
@@ -40,7 +59,7 @@ namespace TheWorld.Models
             {
                 Name = "World Trip",
                 Created = DateTime.UtcNow,
-                UserName = "",
+                UserName = "samhastings",
                 Stops = new List<Stop>()
                 {
                     new Stop() { Order = 0, Latitude =  33.748995, Longitude =  -84.387982, Name = "Atlanta, Georgia", Arrival = DateTime.Parse("Jun 3, 2014") },
