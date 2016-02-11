@@ -19,11 +19,14 @@ namespace TheWorld.Controllers.Api
     {
         private IWorldRepository _repository;
         private ILogger<StopController> _logger;
+    
+
 
         public StopController(IWorldRepository repository, ILogger<StopController> logger)
         {
             _repository = repository;
             _logger = logger;
+           
         }
 
         [HttpGet("")]
@@ -55,7 +58,7 @@ namespace TheWorld.Controllers.Api
                     //Map to the entity
                     var newStop = Mapper.Map<Stop>(vm);
                     //Looking up geo coord
-
+                  
                     //Save to the databse
                     _repository.AddStop(tripName,User.Identity.Name, newStop);
 
