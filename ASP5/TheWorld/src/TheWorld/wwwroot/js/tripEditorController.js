@@ -54,7 +54,7 @@
             travelMap.createMap({
                 stops: mapStops,
                 selector: "#map",
-                currentStop: 1,
+                currentStop: 0,
                 initialZoom: 3
             })
         }
